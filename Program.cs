@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DinosaurPark
 {
@@ -9,16 +10,16 @@ namespace DinosaurPark
         public string DietType;
         public int Weight;
         public int EnclosureNumber;
-
         public DateTime WhenAcquired;
 
-        public Dinosaur(string name)
+        public Dinosaur()
         {
-            this.Name = name;
+            this.WhenAcquired = DateTime.Now;
         }
+
         public string Description()
         {
-            return $"This dino's name is {this.Name}";
+            return $"This dino is a {this.Name}. They were born at {this.WhenAcquired}. Be aware of what you feed {this.Name} as they are a(n) {this.DietType} and have a very specific diet! They currently weigh {this.Weight} pounds, which is ideal. Don't forget to visit them in enclosure {this.EnclosureNumber}!";
         }
     }
 
@@ -26,9 +27,22 @@ namespace DinosaurPark
     {
         static List<Dinosaur> Dinos = new List<Dinosaur>()
     {
-      new Dinosaur("Triceratops"),
-      new Dinosaur("Velociraptor"),
+      new Dinosaur()
+      {
+        Name = "Triceratops",
+        DietType = "Herbivore",
+        Weight = 23400,
+        EnclosureNumber = 1
+      },
+      new Dinosaur()
+      {
+        Name = "T-Rex",
+        DietType = "Carnivore",
+        Weight = 76300,
+        EnclosureNumber = 2
+      }
     };
+
         static void Main(string[] args)
         {
             Console.WriteLine(@"
@@ -99,60 +113,79 @@ namespace DinosaurPark
             {
                 Console.WriteLine(dino.Description());
             }
-            Console.Write("\nPress any key to continue...");
-            Console.ReadKey();
+            WaitForKeyPress();
         }
 
         static void AddDino()
         {
             Console.Clear();
-            Console.WriteLine("You picked 'add'");
-            Console.WriteLine("Please tell me your Dino's name.");
-            var newDinoName = Console.ReadLine();
-
-            Console.WriteLine("Is this Dino a Carnivore or Herbivore? ")
-            var newDinoDiet = Console.ReadLine();
-
-            Console.WriteLine("How much does this Dino weigh (in pounds)?");
-            var newDinoWeight = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("Into which enclosure number would you like to place this Dino?");
-            var newDinoEnclosure = int.Parse(Console.ReadLine());
-
-            var newDinoTime = Dinosaur.WhenAcquired;
-
-            var newDino = new Dinosaur()
             {
-                Name = newDinoName,
-                DietType = newDinoDiet,
-                Weight = newDinoWeight,
-                EnclosureNumber = newDinoEnclosure,
+                Console.WriteLine("You picked 'add'");
+                Console.WriteLine("Please tell me your Dino's name.");
+                var newDinoName = Console.ReadLine();
 
+                Console.WriteLine("Is this Dino a Carnivore or Herbivore? ");
+                var newDinoDiet = Console.ReadLine();
+
+                Console.WriteLine("How much does this Dino weigh (in pounds)?");
+                var newDinoWeight = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Which enclosure number would you like to place this Dino?");
+                var newDinoEnclosure = int.Parse(Console.ReadLine());
+
+
+                var newDino = new Dinosaur()
+                {
+                    Name = newDinoName,
+                    DietType = newDinoDiet,
+                    Weight = newDinoWeight,
+                    EnclosureNumber = newDinoEnclosure,
+                };
+                Dinos.Add(newDino);
             }
-
-
-
-
+            WaitForKeyPress();
         }
-
         static void RemoveDino()
         {
             Console.WriteLine("You picked 'remove'");
+            Console.WriteLine("What is the name of the Dino you want to remove?");
+            var dinoNameToRemove = Console.ReadLine();
+            var dinosRemoved = Dinos.RemoveAll(dino => dino.Name == dinoNameToRemove);
+            Console.WriteLine($"Removed {dinosRemoved} dino(s) named {dinoNameToRemove}.");
+            WaitForKeyPress();
         }
 
         static void TransferDino()
         {
             Console.WriteLine("You picked 'transfer'");
+            Console.WriteLine("What is the name of the Dino you want to transfer?");
+            var dinoNameToTransfer = Console.ReadLine();
+            Console.WriteLine($"Which enclosure would you like to transfer {dinoNameToTransfer} to?");
+            var enclosureToTransferTo = int.Parse(Console.ReadLine());
+            Dinos.Find(dino => dino.Name == dinoNameToTransfer).EnclosureNumber = enclosureToTransferTo;
+            WaitForKeyPress();
+
         }
 
         static void ParkSummary()
         {
             Console.WriteLine("You picked 'summary'");
+            var herbivores = Dinos.Where(dino => dino.DietType == "Herbivore");
+            var carnivores = Dinos.Where(dino => dino.DietType == "Carnivore");
+
+            Console.WriteLine($"There are {herbivores.Count()} Herbivores, and {carnivores.Count()} Carnivores in the park.");
+            WaitForKeyPress();
         }
 
         static void PrintTitle(string message)
         {
             Console.WriteLine("TODO: IMPLEMENT ME");
+        }
+
+        static void WaitForKeyPress()
+        {
+            Console.Write("\nPress any key to continue...");
+            Console.ReadKey();
         }
 
         static int PromptForInt(string message)
