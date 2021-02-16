@@ -45,10 +45,9 @@ namespace DinosaurPark
 
         static void Main(string[] args)
         {
+            PrintTitle("Welcome to.... Dino Park!");
             Console.WriteLine(@"
-      
-              ~~ Welcome to Dino Park™ ~~
-                    
+                                    
                     /~~~~~~~~~~~~\_
  _+=+_             _[~  /~~~~~~~~~~~~\_
 {""""|""""}         [~~~    [~   /~~~~~~~~~\_
@@ -71,7 +70,7 @@ namespace DinosaurPark
 2) Add         Create a new Dino
 3) Remove      Remove a Dino
 4) Transfer    Move a Dino to a new enclosure
-5) Summary     Overview of Dino Park™
+5) Summary     Overview of Dino Park
 6) Quit        Exit the program");
 
                 // Console.WriteLine($"You picked: {menuChoice}");
@@ -102,7 +101,7 @@ namespace DinosaurPark
                 Console.Clear();
             } while (menuChoice != 6);
 
-            Console.WriteLine("Goodbye!");
+            PrintTitle("Goodbye! Hope You've enjoyed visiting Dino Park!");
         }
 
         static void ViewDinos()
@@ -130,7 +129,7 @@ namespace DinosaurPark
                 Console.WriteLine("How much does this Dino weigh (in pounds)?");
                 var newDinoWeight = int.Parse(Console.ReadLine());
 
-                Console.WriteLine("Which enclosure number would you like to place this Dino?");
+                Console.WriteLine("Which enclosure number would you like to place this Dino in?");
                 var newDinoEnclosure = int.Parse(Console.ReadLine());
 
 
@@ -179,7 +178,10 @@ namespace DinosaurPark
 
         static void PrintTitle(string message)
         {
-            Console.WriteLine("TODO: IMPLEMENT ME");
+            var paddedMessage = message.PadLeft(2, ('*')).PadRight(2, ('*'));
+            Console.WriteLine();
+            Console.WriteLine(message);
+            Console.WriteLine();
         }
 
         static void WaitForKeyPress()
